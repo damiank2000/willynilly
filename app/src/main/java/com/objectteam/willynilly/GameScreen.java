@@ -111,9 +111,8 @@ public class GameScreen extends GLScreen {
 	}
 	
 	private void updateRunning(float deltaTime) {
-
 	    List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
-	    if (world.willy.state == CharacterState.Running) {
+	    if (world.willy.canControl()) {
 		    int len = touchEvents.size();
 		    for(int i = 0; i < len; i++) {
 		        TouchEvent event = touchEvents.get(i);
@@ -122,7 +121,6 @@ public class GameScreen extends GLScreen {
 		        	Assets.playSound(Assets.boingSound);
 		        	return;
 		        }
-
 		    }
 	    }
 	    

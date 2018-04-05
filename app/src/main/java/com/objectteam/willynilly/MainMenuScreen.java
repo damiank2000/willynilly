@@ -13,26 +13,27 @@ import com.objectteam.framework.gl.SpriteBatcher;
 import com.objectteam.framework.gl.TextureRegion;
 import com.objectteam.framework.impl.GLScreen;
 import com.objectteam.framework.math.Vector2;
+import com.objectteam.willynilly.gameObjects.DemoWilly;
 
 public class MainMenuScreen extends GLScreen {
-    Camera2D guiCam;
-    SpriteBatcher batcher;
-    PushButton soundButton;
-    PushButton playButton;
-    PushButton highscoresButton;
-    PushButton debugButton;
-    PushButton levelUpButton;
-    Vector2 touchPoint;
-    Willy[] willies;
-    Random random = new Random();
+    private Camera2D guiCam;
+    private SpriteBatcher batcher;
+    private PushButton soundButton;
+    private PushButton playButton;
+    private PushButton highScoresButton;
+    private PushButton debugButton;
+    private PushButton levelUpButton;
+    private Vector2 touchPoint;
+    private DemoWilly[] willies;
+    private Random random = new Random();
     
-    static final int SCREEN_WIDTH = 480;
-    static final int SCREEN_HEIGHT = 320;
-    static final int MOVING_WILLIES = 10;
+    private static final int SCREEN_WIDTH = 480;
+    private static final int SCREEN_HEIGHT = 320;
+    private static final int MOVING_WILLIES = 10;
     
-    World world;
-    WorldListener worldListener;
-    int startingLevel = 1;
+    private World world;
+    private WorldListener worldListener;
+    private int startingLevel = 1;
     
     public MainMenuScreen(Game game) {
         super(game);
@@ -40,11 +41,11 @@ public class MainMenuScreen extends GLScreen {
         batcher = new SpriteBatcher(glGraphics, 100);
         soundButton = new PushButton(0, 0, 64, 64);
         playButton = new PushButton((SCREEN_WIDTH / 2) - 150, 130, 300, 72);
-        highscoresButton = new PushButton((SCREEN_WIDTH / 2) - 150, 130 - 18 - 36, 300, 36);
+        highScoresButton = new PushButton((SCREEN_WIDTH / 2) - 150, 130 - 18 - 36, 300, 36);
         debugButton = new PushButton((SCREEN_WIDTH / 2) - 150, 130 - 18 - 36 - 36, 300, 36);
         levelUpButton = new PushButton((SCREEN_WIDTH - 64), 0, 64, 64);
         touchPoint = new Vector2();
-        willies = new Willy[MOVING_WILLIES];
+        willies = new DemoWilly[MOVING_WILLIES];
         createWillies();
     }       
 
@@ -54,9 +55,9 @@ public class MainMenuScreen extends GLScreen {
     		float y = random.nextFloat() * guiCam.frustumHeight;
     		float xVelocity = (random.nextFloat() - 0.5f) * 500;
     		float yVelocity = (random.nextFloat() - 0.5f) * 500;
-    		willies[i] = new Willy(x, y);
+    		willies[i] = new DemoWilly(x, y, guiCam.frustumWidth, guiCam.frustumHeight);
     		willies[i].velocity.set(xVelocity, yVelocity);
-    		willies[i].state = CharacterState.Jumping;
+    		willies[i].startJumpingState();
     	}
     }
     
@@ -66,7 +67,7 @@ public class MainMenuScreen extends GLScreen {
         game.getInput().getKeyEvents();
         
     	for (int i=0; i < MOVING_WILLIES; i++) {
-    		moveWilly(willies[i], deltaTime);
+    		willies[i].update(deltaTime);
     	}
     	
         int len = touchEvents.size();
@@ -81,7 +82,7 @@ public class MainMenuScreen extends GLScreen {
                     game.setScreen(new ChooseLevelScreen(game));
                     return;
                 }
-                if(highscoresButton.pushed(touchPoint)) {
+                if(highScoresButton.pushed(touchPoint)) {
                     Assets.playSound(Assets.clickSound);
                     game.setScreen(new HighscoresScreen(game));
                     return;
@@ -155,19 +156,6 @@ public class MainMenuScreen extends GLScreen {
 		game.setScreen(new LevelStartScreen(game, world));
 	}
 
-	private void moveWilly(Willy willy, float deltaTime) {
-		willy.position.add(willy.velocity.x * deltaTime, willy.velocity.y * deltaTime);
-		if (willy.position.x > guiCam.frustumWidth)
-			willy.position.x = 0;
-		else if (willy.position.x < 0) 
-			willy.position.x = guiCam.frustumWidth;
-		if (willy.position.y > guiCam.frustumHeight)
-			willy.position.y = 0;
-		else if (willy.position.y < 0) 
-			willy.position.y = guiCam.frustumHeight;
-		willy.stateTime += deltaTime;
-	}
-
     @Override
     public void present(float deltaTime) {
         GL10 gl = glGraphics.getGL();        
@@ -202,18 +190,18 @@ public class MainMenuScreen extends GLScreen {
         gl.glDisable(GL10.GL_BLEND);
     }
     
-    private void drawWilly(Willy willy) {
+    private void drawWilly(DemoWilly willy) {
         TextureRegion keyFrame;
-        switch(willy.state) {
+        switch(willy.getState()) {
         case Falling:
-            keyFrame = Assets.fallingWilly.getKeyFrame(willy.stateTime, Animation.ANIMATION_LOOPING);
+            keyFrame = Assets.fallingWilly.getKeyFrame(willy.getStateTime(), Animation.ANIMATION_LOOPING);
             break;
         case Jumping:
-            keyFrame = Assets.runningWilly.getKeyFrame(willy.stateTime, Animation.ANIMATION_LOOPING);
+            keyFrame = Assets.runningWilly.getKeyFrame(willy.getStateTime(), Animation.ANIMATION_LOOPING);
             break;
         case Hit:
         default:
-        	keyFrame = Assets.runningWilly.getKeyFrame(willy.stateTime, Animation.ANIMATION_LOOPING);
+        	keyFrame = Assets.runningWilly.getKeyFrame(willy.getStateTime(), Animation.ANIMATION_LOOPING);
         }
         
         float side = willy.velocity.x < 0? -1: 1;        

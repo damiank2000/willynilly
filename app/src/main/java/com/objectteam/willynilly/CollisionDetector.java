@@ -4,13 +4,22 @@ import java.util.ArrayList;
 
 import com.objectteam.framework.math.OverlapTester;
 import com.objectteam.framework.math.Rectangle;
+import com.objectteam.willynilly.gameObjects.Bat;
+import com.objectteam.willynilly.gameObjects.Echidna;
+import com.objectteam.willynilly.gameObjects.Fan;
+import com.objectteam.willynilly.gameObjects.Finish;
+import com.objectteam.willynilly.gameObjects.JetPack;
+import com.objectteam.willynilly.gameObjects.Opal;
+import com.objectteam.willynilly.gameObjects.Platform;
+import com.objectteam.willynilly.gameObjects.WaftyBird;
+import com.objectteam.willynilly.gameObjects.Willy;
 
 public class CollisionDetector {
 
 	public void checkCollisions(World world) {
 	    checkPlatformCollisions(world);
 	    if (world.state == World.WORLD_STATE_RUNNING) {
-	    	if (world.willy.state != CharacterState.Stunned) {
+	    	if (world.willy.canCollide()) {
 			    checkBatCollisions(world);
 			    checkWaftyBirdCollisions(world);
 			    checkEchidnaCollisions(world);
@@ -23,8 +32,6 @@ public class CollisionDetector {
 	}
 	
 	private void checkPlatformCollisions(World world) {
-
-		if (world.willy.state == CharacterState.Hit) return;
 
 		ArrayList<Platform> candidates = new ArrayList<Platform>(world.platforms);
 	    Platform onPlatform = null;
@@ -43,32 +50,25 @@ public class CollisionDetector {
 	    
 	    if (onPlatform != null) {
 		    candidates.remove(onPlatform);
-	    	if (world.willy.state == CharacterState.AboutToStopRunning)
-	    		world.willy.state = CharacterState.Running;
-	    	if (world.willy.state != CharacterState.Running)
-	    		world.willy.startRunningState();
-	    	world.willy.position.y = (onPlatform.position.y + (Platform.PLATFORM_HEIGHT/2) + (Willy.HEIGHT /2) - 0.01f);
-	    	world.willy.velocity.y = 0; 
+			world.willy.onPlatform(onPlatform);
             }
         else {
-    	    if (world.willy.state == CharacterState.Running) {
-    	    	world.willy.startRunToFallTransitionState();
-    	    }
-	    }	    
+			world.willy.notOnPlatform();
+	    }
 
 	    Platform hitPlatform = null;
 	    for (Platform candidate : candidates) {
 	        if (!candidate.canPassThroughPlatform && OverlapTester.overlapRectangles(
 	        		(Rectangle)world.willy.bounds, 
 	        		(Rectangle)candidate.bounds)) {
-		        hitPlatform = candidate;
-                break;
-            	}
+				hitPlatform = candidate;
+				break;
+			}
 	    }
 	    
 	    if (hitPlatform != null) {
-	    	world.willy.hitPlatform();
-            }
+			world.willy.hitPlatform();
+		}
 	}
 	
 	private void checkBatCollisions(World world) {

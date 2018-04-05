@@ -1,5 +1,7 @@
 package com.objectteam.willynilly
 
+import com.objectteam.willynilly.gameObjects.Fan
+
 class FanTest extends GroovyTestCase {
     void setUp() {
         super.setUp()

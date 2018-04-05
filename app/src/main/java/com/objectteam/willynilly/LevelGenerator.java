@@ -1,6 +1,14 @@
 package com.objectteam.willynilly;
 
 import com.objectteam.framework.GameObject;
+import com.objectteam.willynilly.gameObjects.Bat;
+import com.objectteam.willynilly.gameObjects.Decoration;
+import com.objectteam.willynilly.gameObjects.Echidna;
+import com.objectteam.willynilly.gameObjects.Finish;
+import com.objectteam.willynilly.gameObjects.JetPack;
+import com.objectteam.willynilly.gameObjects.Opal;
+import com.objectteam.willynilly.gameObjects.Platform;
+import com.objectteam.willynilly.gameObjects.WaftyBird;
 import com.objectteam.willynilly.levels.*;
 
 public class LevelGenerator {

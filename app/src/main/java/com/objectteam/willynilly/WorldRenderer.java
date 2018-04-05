@@ -10,6 +10,16 @@ import com.objectteam.framework.gl.Camera2D;
 import com.objectteam.framework.gl.SpriteBatcher;
 import com.objectteam.framework.gl.TextureRegion;
 import com.objectteam.framework.impl.GLGraphics;
+import com.objectteam.willynilly.gameObjects.Bat;
+import com.objectteam.willynilly.gameObjects.Decoration;
+import com.objectteam.willynilly.gameObjects.Echidna;
+import com.objectteam.willynilly.gameObjects.Fan;
+import com.objectteam.willynilly.gameObjects.Finish;
+import com.objectteam.willynilly.gameObjects.JetPack;
+import com.objectteam.willynilly.gameObjects.Opal;
+import com.objectteam.willynilly.gameObjects.Platform;
+import com.objectteam.willynilly.gameObjects.WaftyBird;
+import com.objectteam.willynilly.gameObjects.Willy;
 
 public class WorldRenderer {
     static final float FRUSTUM_WIDTH = 15;
@@ -68,24 +78,25 @@ public class WorldRenderer {
     
     private void renderWilly() {
         TextureRegion keyFrame;
-        switch(world.willy.state) {
+        float stateTime = world.willy.getStateTime();
+        switch(world.willy.getState()) {
             case Falling:
-                keyFrame = Assets.fallingWilly.getKeyFrame(world.willy.stateTime, Animation.ANIMATION_LOOPING);
+                keyFrame = Assets.fallingWilly.getKeyFrame(stateTime, Animation.ANIMATION_LOOPING);
                 break;
             case Jumping:
                 keyFrame = Assets.jumpingWilly;
                 break;
             case Flying:
-                keyFrame = Assets.flyingWilly.getKeyFrame(world.willy.stateTime, Animation.ANIMATION_LOOPING);
+                keyFrame = Assets.flyingWilly.getKeyFrame(stateTime, Animation.ANIMATION_LOOPING);
                 break;
             case Running:
             case AboutToStopRunning:
-                keyFrame = Assets.runningWilly.getKeyFrame(world.willy.stateTime, Animation.ANIMATION_LOOPING);
+                keyFrame = Assets.runningWilly.getKeyFrame(stateTime, Animation.ANIMATION_LOOPING);
                 break;
             case Hit:
             case Stunned:
             default:
-                keyFrame = Assets.stunnedWilly.getKeyFrame(world.willy.stateTime, Animation.ANIMATION_LOOPING);
+                keyFrame = Assets.stunnedWilly.getKeyFrame(stateTime, Animation.ANIMATION_LOOPING);
         }
         
         float side = world.willy.velocity.x < 0? -1: 1;        
@@ -100,7 +111,7 @@ public class WorldRenderer {
         for(int i = 0; i < len; i++) {
             Platform platform = world.platforms.get(i);
             TextureRegion keyFrame;
-            switch (platform.platformType) {
+            switch (platform.getPlatformType()) {
             case 1:
                 keyFrame = Assets.platform1;
                 break;
@@ -117,8 +128,8 @@ public class WorldRenderer {
                 keyFrame = Assets.platform1;
                 break;
             }
-            if(platform.state == Platform.PLATFORM_STATE_PULVERIZING) {                
-                keyFrame = Assets.brakingPlatform.getKeyFrame(platform.stateTime, Animation.ANIMATION_NONLOOPING);
+            if(platform.getState() == PulverizableState.Pulverizing) {
+                keyFrame = Assets.brakingPlatform.getKeyFrame(platform.getStateTime(), Animation.ANIMATION_NONLOOPING);
             }            
                                    
             batcher.drawSprite(platform.position.x, platform.position.y, 2, 1, keyFrame);
@@ -132,7 +143,7 @@ public class WorldRenderer {
         for(int i = 0; i < len; i++) {
             Decoration decoration = decorations.get(i);
             TextureRegion keyFrame;
-            switch (decoration.decorationType) {
+            switch (decoration.getDecorationType()) {
 	            case Decoration.DECORATION_TYPE_TUNNEL_BACKGROUND:
 	            	keyFrame = Assets.rockTunnelBackground;
 	            	break;
@@ -174,15 +185,16 @@ public class WorldRenderer {
         for(int i = 0; i < len; i++) {
             Opal opal = world.opals.get(i);
             TextureRegion keyFrame;
+            float stateTime = opal.getStateTime();
             switch (opal.state) {
                 case Collectable:
-                    keyFrame = Assets.opalAnim.getKeyFrame(opal.stateTime, Animation.ANIMATION_LOOPING);
+                    keyFrame = Assets.opalAnim.getKeyFrame(stateTime, Animation.ANIMATION_LOOPING);
                     break;
                 case Collected:
-                    keyFrame = Assets.scoreAnim.getKeyFrame(opal.stateTime, Animation.ANIMATION_NONLOOPING);
+                    keyFrame = Assets.scoreAnim.getKeyFrame(stateTime, Animation.ANIMATION_NONLOOPING);
                     break;
                 default:
-                    keyFrame = Assets.opalAnim.getKeyFrame(opal.stateTime, Animation.ANIMATION_LOOPING);
+                    keyFrame = Assets.opalAnim.getKeyFrame(stateTime, Animation.ANIMATION_LOOPING);
                     break;
             }
             batcher.drawSprite(opal.position.x, opal.position.y, 1, 1, keyFrame);
@@ -193,7 +205,7 @@ public class WorldRenderer {
         len = world.fans.size();
         for(int i = 0; i < len; i++) {
             Fan fan = world.fans.get(i);
-            TextureRegion keyFrame = Assets.fan.getKeyFrame(fan.stateTime, Animation.ANIMATION_LOOPING);
+            TextureRegion keyFrame = Assets.fan.getKeyFrame(fan.getStateTime(), Animation.ANIMATION_LOOPING);
             batcher.drawSprite(fan.position.x, fan.position.y, 1, 1, keyFrame);
         }
     }
@@ -202,7 +214,7 @@ public class WorldRenderer {
         int len = world.bats.size();
         for(int i = 0; i < len; i++) {
             Bat bat = world.bats.get(i);
-            TextureRegion keyFrame = Assets.bat.getKeyFrame(bat.stateTime, Animation.ANIMATION_LOOPING);
+            TextureRegion keyFrame = Assets.bat.getKeyFrame(bat.getStateTime(), Animation.ANIMATION_LOOPING);
             float side = bat.velocity.x < 0?-1:1;
             batcher.drawSprite(bat.position.x, bat.position.y, side * 1, 1, keyFrame);
             if (Settings.debugMode)
@@ -214,7 +226,7 @@ public class WorldRenderer {
         int len = world.waftyBirds.size();
         for(int i = 0; i < len; i++) {
             WaftyBird waftyBird = world.waftyBirds.get(i);
-            TextureRegion keyFrame = Assets.waftyBird.getKeyFrame(waftyBird.stateTime, Animation.ANIMATION_LOOPING);
+            TextureRegion keyFrame = Assets.waftyBird.getKeyFrame(waftyBird.getStateTime(), Animation.ANIMATION_LOOPING);
             float side = waftyBird.velocity.x < 0?-1:1;
             batcher.drawSprite(waftyBird.position.x, waftyBird.position.y, side * 1, 1, keyFrame);
             if (Settings.debugMode)
@@ -226,7 +238,7 @@ public class WorldRenderer {
         int len = world.echidnas.size();
         for(int i = 0; i < len; i++) {
             Echidna echidna = world.echidnas.get(i);
-            TextureRegion keyFrame = Assets.walkingEchidna.getKeyFrame(echidna.stateTime, Animation.ANIMATION_LOOPING);
+            TextureRegion keyFrame = Assets.walkingEchidna.getKeyFrame(echidna.getStateTime(), Animation.ANIMATION_LOOPING);
             float side = echidna.velocity.x < 0?-1:1;
             batcher.drawSprite(echidna.position.x, echidna.position.y, side * 2, 1.33f, keyFrame);
             if (Settings.debugMode)
@@ -237,15 +249,15 @@ public class WorldRenderer {
     private void renderFinish() {
     	int len = world.finishes.size();
         for(int i = 0; i < len; i++) {
-        	Finish nest = world.finishes.get(i);
-        	TextureRegion finish;
+        	Finish finish = world.finishes.get(i);
+        	TextureRegion textureRegion;
         	if (world.state == World.WORLD_STATE_NEXT_LEVEL) {
-        		finish = Assets.wombatSign.getKeyFrame(nest.stateTime, Animation.ANIMATION_LOOPING);
+        		textureRegion = Assets.wombatSign.getKeyFrame(finish.getStateTime(), Animation.ANIMATION_LOOPING);
         	}
         	else {
-        		finish = Assets.staticWombatSign;
+        		textureRegion = Assets.staticWombatSign;
         	}
-        	batcher.drawSprite(nest.position.x, nest.position.y, 2, 3, finish);
+        	batcher.drawSprite(finish.position.x, finish.position.y, 2, 3, textureRegion);
         }
     }
 

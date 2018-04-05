@@ -5,6 +5,17 @@ import java.util.List;
 import com.objectteam.framework.GameObject;
 import com.objectteam.framework.Updatable;
 import com.objectteam.framework.math.Vector2;
+import com.objectteam.willynilly.gameObjects.Bat;
+import com.objectteam.willynilly.gameObjects.Decoration;
+import com.objectteam.willynilly.gameObjects.Echidna;
+import com.objectteam.willynilly.gameObjects.Fan;
+import com.objectteam.willynilly.gameObjects.Finish;
+import com.objectteam.willynilly.gameObjects.JetPack;
+import com.objectteam.willynilly.gameObjects.Opal;
+import com.objectteam.willynilly.gameObjects.Platform;
+import com.objectteam.willynilly.gameObjects.Spring;
+import com.objectteam.willynilly.gameObjects.WaftyBird;
+import com.objectteam.willynilly.gameObjects.Willy;
 
 public class World {
     public static final float DEFAULT_WORLD_HEIGHT = 20;
@@ -84,7 +95,7 @@ public class World {
 	    updateFans(deltaTime);
 	    updateEchidnas(deltaTime);
 	    updateFinishes(deltaTime);
-	    if (willy.state != CharacterState.Hit)
+	    if (willy.canCollide())
 	        collisionDetector.checkCollisions(this);
 	    if (state == WORLD_STATE_RUNNING) {
 			timer += deltaTime;
@@ -116,8 +127,7 @@ public class World {
 	    for (int i = 0; i < len; i++) {
 	        Platform platform = platforms.get(i);
 	        platform.update(deltaTime);
-	        if (platform.state == Platform.PLATFORM_STATE_PULVERIZING
-	                && platform.stateTime > Platform.PLATFORM_PULVERIZE_TIME) {
+	        if (platform.hasCompletedPulverizing()) {
 	            platforms.remove(platform);
 	            len = platforms.size();
 	        }

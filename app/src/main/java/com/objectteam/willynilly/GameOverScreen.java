@@ -12,6 +12,7 @@ import com.objectteam.framework.gl.SpriteBatcher;
 import com.objectteam.framework.impl.GLScreen;
 import com.objectteam.framework.math.Rectangle;
 import com.objectteam.framework.math.Vector2;
+import com.objectteam.willynilly.gameObjects.Willy;
 
 public class GameOverScreen extends GLScreen {
     Camera2D guiCam;
