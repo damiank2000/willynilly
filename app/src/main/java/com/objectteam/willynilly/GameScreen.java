@@ -17,39 +17,33 @@ import com.objectteam.framework.math.Rectangle;
 import com.objectteam.framework.math.Vector2;
 
 public class GameScreen extends GLScreen {
-    static final int GAME_READY = 0;    
-    static final int GAME_RUNNING = 1;
-    static final int GAME_PAUSED = 2;
-    static final int GAME_LEVEL_END = 3;
-    static final int GAME_LOST_LIFE = 4;
-    static final int GAME_OVER = 5;
+
+    private static final int SCREEN_WIDTH = 480;
+    private static final int SCREEN_HEIGHT = 320;
     
-    static final int SCREEN_WIDTH = 480;
-    static final int SCREEN_HEIGHT = 320;
-    
-    static final float SCREEN_LOST_LIFE_DISPLAY_DURATION = 3f;
+    private static final float SCREEN_LOST_LIFE_DISPLAY_DURATION = 3f;
   
-    int state;
-    Camera2D guiCam;
-    Vector2 touchPoint;
-    SpriteBatcher batcher;    
-    World world;
-    WorldListener worldListener;
-    WorldRenderer renderer;    
-    Rectangle resumeBounds;
-    Rectangle quitBounds;
-    int lastScore;
-    int lastLives;
-    String scoreString;   
-    String livesString;
-    FPSCounter fpsCounter;
-    float stateTime = 0;
-    float lifeStateTime = 0;
-    
-    public GameScreen(Game game, World world) {
+    private GameState state;
+    private Camera2D guiCam;
+    private Vector2 touchPoint;
+    private SpriteBatcher batcher;
+    private World world;
+    private WorldListener worldListener;
+    private WorldRenderer renderer;
+    private Rectangle resumeBounds;
+    private Rectangle quitBounds;
+    private int lastScore;
+    private int lastLives;
+    private String scoreString;
+    private String livesString;
+    private FPSCounter fpsCounter;
+    private float stateTime = 0;
+    private float lifeStateTime;
+
+    GameScreen(Game game, World world) {
         super(game);
         this.world = world;
-        setState(GAME_RUNNING);
+        setState(GameState.Running);
         guiCam = new Camera2D(glGraphics, SCREEN_WIDTH, SCREEN_HEIGHT);
         touchPoint = new Vector2();
         batcher = new SpriteBatcher(glGraphics, 5000);
@@ -72,32 +66,32 @@ public class GameScreen extends GLScreen {
 	    lifeStateTime += deltaTime;
 	    
 	    switch(state) {
-	    case GAME_READY:
+	    case Ready:
 	        updateReady();
 	        break;
-	    case GAME_RUNNING:
+	    case Running:
 	        updateRunning(deltaTime);
 	        break;
-	    case GAME_PAUSED:
+	    case Paused:
 	        updatePaused();
 	        break;
-	    case GAME_LEVEL_END:
+	    case LevelEnd:
 	        updateLevelEnd(deltaTime);
 	        break;
-	    case GAME_LOST_LIFE:
+	    case LostLife:
 	        updateLostLife();
 	        break;
-	    case GAME_OVER:
+	    case GameOver:
 	        updateGameOver();
 	        break;
 	    }
 	}
 	
-	private void setState(int state) {
+	private void setState(GameState state) {
 		this.state = state;
 		stateTime = 0;
 		lifeStateTime = 0;
-		if (state == GAME_RUNNING) {
+		if (state == GameState.Running) {
 			Assets.playMusic(Assets.backgroundMusic);
 		}
 		else {
@@ -134,10 +128,10 @@ public class GameScreen extends GLScreen {
 	    	livesString = "lives: " + lastLives;
 	    }
 	    if(world.state == World.WORLD_STATE_NEXT_LEVEL) {
-	        setState(GAME_LEVEL_END);        
+	        setState(GameState.LevelEnd);
 	    }
 	    if(world.state == World.WORLD_STATE_LOST_LIFE) {
-	        setState(GAME_LOST_LIFE);
+	        setState(GameState.LostLife);
 	    }
 
 	}
@@ -155,7 +149,7 @@ public class GameScreen extends GLScreen {
 	        
 	        if(OverlapTester.pointInRectangle(resumeBounds, touchPoint)) {
 	            Assets.playSound(Assets.clickSound);
-	            setState(GAME_RUNNING);
+	            setState(GameState.Running);
 	            return;
 	        }
 	        
@@ -180,17 +174,17 @@ public class GameScreen extends GLScreen {
 	        world.newLevel();
 	        renderer = new WorldRenderer(glGraphics, batcher, world);
 	        world.score = lastScore;
-	        setState(GAME_READY);
+	        setState(GameState.Ready);
 	    }
 	}
 	
 	private void updateLostLife() {
     	if (stateTime >= SCREEN_LOST_LIFE_DISPLAY_DURATION) {
     		if (world.willy.lives <= 0) {
-    			setState(GAME_OVER);
+    			setState(GameState.GameOver);
     		}
     		else {
-    			setState(GAME_READY);
+    			setState(GameState.Ready);
     		}
     	}
 	}
@@ -219,22 +213,22 @@ public class GameScreen extends GLScreen {
 	    gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 	    batcher.beginBatch(Assets.items);
 	    switch(state) {
-	    case GAME_READY:
+	    case Ready:
 	        presentReady();
 	        break;
-	    case GAME_RUNNING:
+	    case Running:
 	        presentRunning(deltaTime);
 	        break;
-	    case GAME_PAUSED:
+	    case Paused:
 	        presentPaused();
 	        break;
-	    case GAME_LEVEL_END:
+	    case LevelEnd:
 	        presentLevelEnd();
 	        break;
-	    case GAME_LOST_LIFE:
+	    case LostLife:
 	        presentLostLife();
 	        break;
-	    case GAME_OVER:
+	    case GameOver:
 	        presentGameOver();
 	        break;
 	    }
@@ -251,7 +245,6 @@ public class GameScreen extends GLScreen {
 	    Assets.font.drawText(batcher, scoreString, 16, SCREEN_HEIGHT-20);
 	    presentRemainingLives();
 	}
-
 	
 	private void presentLostLife() {
 	    Assets.font.drawText(batcher, scoreString, 16, SCREEN_HEIGHT-20);
@@ -294,8 +287,8 @@ public class GameScreen extends GLScreen {
 
 	@Override
     public void pause() {
-        if(state == GAME_RUNNING)
-            setState(GAME_PAUSED);
+        if(state == GameState.Running)
+            setState(GameState.Paused);
     }
 
     @Override

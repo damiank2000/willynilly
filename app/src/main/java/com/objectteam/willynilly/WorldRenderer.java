@@ -22,14 +22,14 @@ import com.objectteam.willynilly.gameObjects.WaftyBird;
 import com.objectteam.willynilly.gameObjects.Willy;
 
 public class WorldRenderer {
-    static final float FRUSTUM_WIDTH = 15;
-    static final float FRUSTUM_HEIGHT = 10;    
-    GLGraphics glGraphics;
-    World world;
-    Camera2D cam;
-    SpriteBatcher batcher;    
+    private static final float FRUSTUM_WIDTH = 15;
+    private static final float FRUSTUM_HEIGHT = 10;
+    private GLGraphics glGraphics;
+    private World world;
+    private Camera2D cam;
+    private SpriteBatcher batcher;
     
-    public WorldRenderer(GLGraphics glGraphics, SpriteBatcher batcher, World world) {
+    WorldRenderer(GLGraphics glGraphics, SpriteBatcher batcher, World world) {
         this.glGraphics = glGraphics;
         this.world = world;
         this.cam = new Camera2D(glGraphics, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
@@ -46,7 +46,7 @@ public class WorldRenderer {
         renderObjects();        
     }
     
-    public void renderBackground() {
+    private void renderBackground() {
     	float backgroundX = cam.position.x * 3;
         batcher.beginBatch(Assets.background);
         Assets.backgroundRegion.setX(backgroundX);
@@ -56,7 +56,7 @@ public class WorldRenderer {
         batcher.endBatch();
     }
     
-    public void renderObjects() {
+    private void renderObjects() {
         GL10 gl = glGraphics.getGL();
         gl.glEnable(GL10.GL_BLEND);
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -144,25 +144,25 @@ public class WorldRenderer {
             Decoration decoration = decorations.get(i);
             TextureRegion keyFrame;
             switch (decoration.getDecorationType()) {
-	            case Decoration.DECORATION_TYPE_TUNNEL_BACKGROUND:
+                case TunnelBackGround:
 	            	keyFrame = Assets.rockTunnelBackground;
 	            	break;
-	            case Decoration.DECORATION_TYPE_TUNNEL_ENTRANCE_LEFT:
+                case TunnelEntranceLeft:
 	            	keyFrame = Assets.rockTunnelLeft;
 	            	break;
-	            case Decoration.DECORATION_TYPE_TUNNEL_EXIT_RIGHT:
+                case TunnelExitRight:
 	            	keyFrame = Assets.rockTunnelRight;
 	            	break;
-	            case Decoration.DECORATION_TYPE_TUNNEL_WALL:
+                case TunnelWall:
 	            	keyFrame = Assets.rockTopCentre;
 	            	break;
-	            case Decoration.DECORATION_TYPE_ROCK_TUNNEL_LEFT:
+                case RockTunnelLeft:
 	            	keyFrame = Assets.rockTopLeft;
 	            	break;
-	            case Decoration.DECORATION_TYPE_ROCK_TUNNEL_CENTRE:
+                case RockTunnelCentre:
 	            	keyFrame = Assets.rockTopCentre;
 	            	break;
-	            case Decoration.DECORATION_TYPE_ROCK_TUNNEL_RIGHT:
+                case RockTunnelRight:
 	            	keyFrame = Assets.rockTopRight;
 	            	break;
 	            default:

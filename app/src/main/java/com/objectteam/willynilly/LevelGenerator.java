@@ -39,42 +39,42 @@ public class LevelGenerator {
 				switch (levelData[y].charAt(x)) {
 					case '1':
 					case '#': {
-						Platform platform = new Platform(Platform.PLATFORM_TYPE_GRASSY_ROCK, Platform.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						Platform platform = new Platform(Platform.PLATFORM_TYPE_GRASSY_ROCK, MotionType.Static, x * 2, y, world);
 						world.platforms.add(platform);
 						break;
 					}
 					case '2': {
-						Platform platform = new Platform(Platform.PLATFORM_TYPE_ROCK_TUNNEL_LEFT, Platform.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						Platform platform = new Platform(Platform.PLATFORM_TYPE_ROCK_TUNNEL_LEFT, MotionType.Static, x * 2, y, world);
 						world.platforms.add(platform);
 						break;
 					}
 					case '3': {
-						Platform platform = new Platform(Platform.PLATFORM_TYPE_ROCK_TUNNEL_CENTER, Platform.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						Platform platform = new Platform(Platform.PLATFORM_TYPE_ROCK_TUNNEL_CENTER, MotionType.Static, x * 2, y, world);
 						world.platforms.add(platform);
 						break;
 					}
 					case '4': {
-						Platform platform = new Platform(Platform.PLATFORM_TYPE_ROCK_TUNNEL_RIGHT, Platform.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						Platform platform = new Platform(Platform.PLATFORM_TYPE_ROCK_TUNNEL_RIGHT, MotionType.Static, x * 2, y, world);
 						world.platforms.add(platform);
 						break;
 					}
 					case '6': {
-						Decoration tunnelBackground = new Decoration(Decoration.DECORATION_TYPE_TUNNEL_ENTRANCE_LEFT, Decoration.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						Decoration tunnelBackground = new Decoration(DecorationType.TunnelEntranceLeft, MotionType.Static, x * 2, y, world);
 						world.backgroundDecoration.add(tunnelBackground);
 						break;
 					}
 					case '7': {
-						Decoration tunnelBackground = new Decoration(Decoration.DECORATION_TYPE_ROCK_TUNNEL_CENTRE, Decoration.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						Decoration tunnelBackground = new Decoration(DecorationType.RockTunnelCentre, MotionType.Static, x * 2, y, world);
 						world.backgroundDecoration.add(tunnelBackground);
 						break;
 					}
 					case '8': {
-						Decoration tunnelBackground = new Decoration(Decoration.DECORATION_TYPE_TUNNEL_EXIT_RIGHT, Decoration.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						Decoration tunnelBackground = new Decoration(DecorationType.TunnelExitRight, MotionType.Static, x * 2, y, world);
 						world.backgroundDecoration.add(tunnelBackground);
 						break;
 					}
 					case 'T': {
-						Decoration tunnel = new Decoration(Decoration.DECORATION_TYPE_TUNNEL_BACKGROUND, Decoration.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						Decoration tunnel = new Decoration(DecorationType.TunnelBackGround, MotionType.Static, x * 2, y, world);
 						world.backgroundDecoration.add(tunnel);
 						break;
 					}
@@ -91,7 +91,7 @@ public class LevelGenerator {
 						break;
 					}
 					case '5': {
-						Platform platform = new Platform(Platform.PLATFORM_TYPE_GRASSY_ROCK, Platform.PLATFORM_MOTION_TYPE_MOVING, x * 2, y, world);
+						Platform platform = new Platform(Platform.PLATFORM_TYPE_GRASSY_ROCK, MotionType.Moving, x * 2, y, world);
 						world.platforms.add(platform);
 						break;
 					}
