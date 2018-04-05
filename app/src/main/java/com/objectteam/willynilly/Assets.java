@@ -37,6 +37,7 @@ public class Assets {
     public static Animation scoreAnim;
     public static Animation runningWilly;
     public static TextureRegion jumpingWilly;
+    public static Animation flyingWilly;
     public static Animation opalAnim;
     public static Animation walkingEchidna;
     public static Animation fallingWilly;
@@ -45,6 +46,7 @@ public class Assets {
     public static Animation waftyBird;
     public static Animation life;
     public static Animation lifeRemoving;
+    public static TextureRegion jetPack;
     public static TextureRegion platform1;
     public static TextureRegion platform2;
     public static TextureRegion platform3;
@@ -72,7 +74,7 @@ public class Assets {
     public static Sound collectSound;
     public static Sound completeSound;
     public static Sound levelStartSound;
-    
+
     public static void load(GLGame game) {
         background = new Texture(game, "background.png");
         backgroundRegion = new TextureRegion(background, 0, 0, 480, 320);      
@@ -184,6 +186,9 @@ public class Assets {
         		new TextureRegion(items, 523, 305, 64, 32),
         		new TextureRegion(items, 523, 343, 64, 32),
         		new TextureRegion(items, 523, 381, 64, 32));
+        flyingWilly = new Animation(0.2f,
+                new TextureRegion(items, 606, 305, 64, 32),
+                new TextureRegion(items, 606, 343, 64, 32));
         bat = new Animation(0.2f, 
                                     new TextureRegion(items, 0, 160, 32, 18),
                                     new TextureRegion(items, 32, 160, 32, 18));
@@ -214,6 +219,7 @@ public class Assets {
                 new TextureRegion(items, 352, 384, 32, 32),
                 new TextureRegion(items, 384, 384, 32, 32),
                 new TextureRegion(items, 416, 384, 32, 32));
+        jetPack = new TextureRegion(items, 450, 384, 32, 32);
         rockTopLeft = new TextureRegion(items, 592, 417, 64, 32);
         rockTopCentre = new TextureRegion(items, 656, 417, 64, 32);
         rockTopRight = new TextureRegion(items, 720, 417, 64, 32);

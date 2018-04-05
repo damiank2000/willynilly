@@ -12,8 +12,6 @@ import com.objectteam.framework.gl.Camera2D;
 import com.objectteam.framework.gl.SpriteBatcher;
 import com.objectteam.framework.gl.TextureRegion;
 import com.objectteam.framework.impl.GLScreen;
-import com.objectteam.framework.math.OverlapTester;
-import com.objectteam.framework.math.Rectangle;
 import com.objectteam.framework.math.Vector2;
 
 public class MainMenuScreen extends GLScreen {
@@ -58,7 +56,7 @@ public class MainMenuScreen extends GLScreen {
     		float yVelocity = (random.nextFloat() - 0.5f) * 500;
     		willies[i] = new Willy(x, y);
     		willies[i].velocity.set(xVelocity, yVelocity);
-    		willies[i].state = Willy.WILLY_STATE_JUMP;
+    		willies[i].state = CharacterState.Jumping;
     	}
     }
     
@@ -207,13 +205,13 @@ public class MainMenuScreen extends GLScreen {
     private void drawWilly(Willy willy) {
         TextureRegion keyFrame;
         switch(willy.state) {
-        case Willy.WILLY_STATE_FALL:
+        case Falling:
             keyFrame = Assets.fallingWilly.getKeyFrame(willy.stateTime, Animation.ANIMATION_LOOPING);
             break;
-        case Willy.WILLY_STATE_JUMP:
+        case Jumping:
             keyFrame = Assets.runningWilly.getKeyFrame(willy.stateTime, Animation.ANIMATION_LOOPING);
             break;
-        case Willy.WILLY_STATE_HIT:
+        case Hit:
         default:
         	keyFrame = Assets.runningWilly.getKeyFrame(willy.stateTime, Animation.ANIMATION_LOOPING);
         }

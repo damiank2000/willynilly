@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.util.Log;
-
 import com.objectteam.framework.GameObject;
 import com.objectteam.framework.gl.Animation;
 import com.objectteam.framework.gl.Camera2D;
@@ -30,7 +28,7 @@ public class WorldRenderer {
     
     public void render() {
     	if (world.state == World.WORLD_STATE_RUNNING) {
-    		cam.position.x = world.willy.position.x + (cam.frustumWidth/2) - (Willy.WILLY_WIDTH * 2);
+    		cam.position.x = world.willy.position.x + (cam.frustumWidth/2) - (Willy.WIDTH * 2);
     		cam.position.y = Math.max(world.willy.position.y, cam.frustumHeight/2);
     	}
         cam.setViewportAndMatrices();
@@ -62,6 +60,7 @@ public class WorldRenderer {
         renderWaftyBirds();
         renderEchidnas();
         renderFinish();
+        renderJetPacks();
         renderDecoration(world.foregroundDecoration);
         batcher.endBatch();
         gl.glDisable(GL10.GL_BLEND);
@@ -70,26 +69,30 @@ public class WorldRenderer {
     private void renderWilly() {
         TextureRegion keyFrame;
         switch(world.willy.state) {
-        case Willy.WILLY_STATE_FALL:
-            keyFrame = Assets.fallingWilly.getKeyFrame(world.willy.stateTime, Animation.ANIMATION_LOOPING);
-            break;
-        case Willy.WILLY_STATE_JUMP:
-            keyFrame = Assets.jumpingWilly;
-            break;
-        case Willy.WILLY_STATE_RUN:
-        case Willy.WILLY_STATE_RUN_EXIT:
-            keyFrame = Assets.runningWilly.getKeyFrame(world.willy.stateTime, Animation.ANIMATION_LOOPING);
-            break;
-        case Willy.WILLY_STATE_HIT:
-        case Willy.WILLY_STATE_STUNNED:
-        default:
-            keyFrame = Assets.stunnedWilly.getKeyFrame(world.willy.stateTime, Animation.ANIMATION_LOOPING);
+            case Falling:
+                keyFrame = Assets.fallingWilly.getKeyFrame(world.willy.stateTime, Animation.ANIMATION_LOOPING);
+                break;
+            case Jumping:
+                keyFrame = Assets.jumpingWilly;
+                break;
+            case Flying:
+                keyFrame = Assets.flyingWilly.getKeyFrame(world.willy.stateTime, Animation.ANIMATION_LOOPING);
+                break;
+            case Running:
+            case AboutToStopRunning:
+                keyFrame = Assets.runningWilly.getKeyFrame(world.willy.stateTime, Animation.ANIMATION_LOOPING);
+                break;
+            case Hit:
+            case Stunned:
+            default:
+                keyFrame = Assets.stunnedWilly.getKeyFrame(world.willy.stateTime, Animation.ANIMATION_LOOPING);
         }
         
         float side = world.willy.velocity.x < 0? -1: 1;        
         batcher.drawSprite(world.willy.position.x, world.willy.position.y, side * 2, 1.33f, keyFrame);
-        if (Settings.debugMode)
-        	drawBounds(world.willy);
+        if (Settings.debugMode) {
+            drawBounds(world.willy);
+        }
     }
     
     private void renderPlatforms() {
@@ -172,15 +175,15 @@ public class WorldRenderer {
             Opal opal = world.opals.get(i);
             TextureRegion keyFrame;
             switch (opal.state) {
-            case Opal.WORM_STATE_WIGGLING:
-            	keyFrame = Assets.opalAnim.getKeyFrame(opal.stateTime, Animation.ANIMATION_LOOPING);
-            	break;
-            case Opal.WORM_STATE_EATEN:
-            	keyFrame = Assets.scoreAnim.getKeyFrame(opal.stateTime, Animation.ANIMATION_NONLOOPING);
-            	break;
-            default:
-            	keyFrame = Assets.opalAnim.getKeyFrame(opal.stateTime, Animation.ANIMATION_LOOPING);
-            	break;
+                case Collectable:
+                    keyFrame = Assets.opalAnim.getKeyFrame(opal.stateTime, Animation.ANIMATION_LOOPING);
+                    break;
+                case Collected:
+                    keyFrame = Assets.scoreAnim.getKeyFrame(opal.stateTime, Animation.ANIMATION_NONLOOPING);
+                    break;
+                default:
+                    keyFrame = Assets.opalAnim.getKeyFrame(opal.stateTime, Animation.ANIMATION_LOOPING);
+                    break;
             }
             batcher.drawSprite(opal.position.x, opal.position.y, 1, 1, keyFrame);
             if (Settings.debugMode)
@@ -243,6 +246,18 @@ public class WorldRenderer {
         		finish = Assets.staticWombatSign;
         	}
         	batcher.drawSprite(nest.position.x, nest.position.y, 2, 3, finish);
+        }
+    }
+
+    private void renderJetPacks() {
+        int len = world.jetPacks.size();
+        for(int i = 0; i < len; i++) {
+            JetPack jetPack = world.jetPacks.get(i);
+            if (jetPack.state == CollectableState.Collectable) {
+                TextureRegion textureRegion = Assets.jetPack;
+                batcher.drawSprite(jetPack.position.x, jetPack.position.y, 2, 3, textureRegion);
+            }
+
         }
     }
     

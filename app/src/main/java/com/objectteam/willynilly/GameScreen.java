@@ -1,11 +1,8 @@
 package com.objectteam.willynilly;
 
 import java.util.List;
-import java.util.Timer;
 
 import javax.microedition.khronos.opengles.GL10;
-
-import android.util.Log;
 
 import com.objectteam.framework.Game;
 import com.objectteam.framework.Input.TouchEvent;
@@ -116,7 +113,7 @@ public class GameScreen extends GLScreen {
 	private void updateRunning(float deltaTime) {
 
 	    List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
-	    if (world.willy.state == Willy.WILLY_STATE_RUN) {
+	    if (world.willy.state == CharacterState.Running) {
 		    int len = touchEvents.size();
 		    for(int i = 0; i < len; i++) {
 		        TouchEvent event = touchEvents.get(i);

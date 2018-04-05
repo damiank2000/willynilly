@@ -1,6 +1,7 @@
 package com.objectteam.willynilly;
 
 import com.objectteam.framework.DynamicGameObject;
+import com.objectteam.framework.GameObject;
 
 public class Finish extends DynamicGameObject {
     public static float FINISH_WIDTH = 1.7f;
@@ -17,3 +18,4 @@ public class Finish extends DynamicGameObject {
     }
     
 }
+

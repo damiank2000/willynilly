@@ -7,11 +7,9 @@ import com.objectteam.framework.Updatable;
 import com.objectteam.framework.math.Vector2;
 
 public class World {
-    public static final float WORLD_WIDTH = 15 * 20;
     public static final float DEFAULT_WORLD_HEIGHT = 20;
     public static final int WORLD_STATE_RUNNING = 0;
     public static final int WORLD_STATE_NEXT_LEVEL = 1;
-    public static final int WORLD_STATE_GAME_OVER = 2;
     public static final int WORLD_STATE_LOST_LIFE = 3;
     public static final int FINISH_LEVEL_SCORE = 100;
     public static final int MAX_LEVEL = 20;
@@ -29,6 +27,7 @@ public class World {
     public List<Echidna> echidnas;
     public List<GameObject> wombatSigns;
     public List<Finish> finishes;
+    public List<JetPack> jetPacks;
     public WorldListener listener;
 
     public float widthSoFar;
@@ -65,6 +64,7 @@ public class World {
         this.echidnas = new ArrayList<Echidna>();
         this.wombatSigns = new ArrayList<GameObject>();
         this.finishes = new ArrayList<Finish>();
+        this.jetPacks = new ArrayList<JetPack>();
         this.timer = 0;
         newLevel();
     }
@@ -84,7 +84,7 @@ public class World {
 	    updateFans(deltaTime);
 	    updateEchidnas(deltaTime);
 	    updateFinishes(deltaTime);
-	    if (willy.state != Willy.WILLY_STATE_HIT)
+	    if (willy.state != CharacterState.Hit)
 	        collisionDetector.checkCollisions(this);
 	    if (state == WORLD_STATE_RUNNING) {
 			timer += deltaTime;
@@ -173,7 +173,7 @@ public class World {
 	}
 
 	private void checkLostLife() {
-        if (willy.position.y + (Willy.WILLY_HEIGHT/2)< 0) {
+        if (willy.position.y + (Willy.HEIGHT /2)< 0) {
         	willy.lives--;
             state = WORLD_STATE_LOST_LIFE;
         }

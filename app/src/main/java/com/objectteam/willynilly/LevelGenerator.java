@@ -22,88 +22,88 @@ public class LevelGenerator {
         world.foregroundDecoration.clear();
         world.backgroundDecoration.clear();
         world.finishes.clear();
+        world.jetPacks.clear();
         world.setWorldHeight(levelData.length);
         world.willy.position.set(1, 6);
         world.willy.velocity.y = 2;
 		for (int y=0; y<levelData.length; y++) {
 			for (int x=0; x<levelData[y].length(); x++) {
 				switch (levelData[y].charAt(x)) {
-				case '1': 
-				case '#': 
-				{
-			        Platform platform = new Platform(Platform.PLATFORM_TYPE_GRASSY_ROCK, Platform.PLATFORM_MOTION_TYPE_STATIC, x * 2,  y, world);
-			        world.platforms.add(platform);
-					break;
-				}
-				case '2': 
-				{
-			        Platform platform = new Platform(Platform.PLATFORM_TYPE_ROCK_TUNNEL_LEFT, Platform.PLATFORM_MOTION_TYPE_STATIC, x * 2,  y, world);
-			        world.platforms.add(platform);
-					break;
-				}
-				case '3': 
-				{
-			        Platform platform = new Platform(Platform.PLATFORM_TYPE_ROCK_TUNNEL_CENTER, Platform.PLATFORM_MOTION_TYPE_STATIC, x * 2,  y, world);
-			        world.platforms.add(platform);
-					break;
-				}
-				case '4': 
-				{
-			        Platform platform = new Platform(Platform.PLATFORM_TYPE_ROCK_TUNNEL_RIGHT, Platform.PLATFORM_MOTION_TYPE_STATIC, x * 2,  y, world);
-			        world.platforms.add(platform);
-					break;
-				}
-				case '6': {
-					Decoration tunnelBackground = new Decoration(Decoration.DECORATION_TYPE_TUNNEL_ENTRANCE_LEFT, Decoration.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
-					world.backgroundDecoration.add(tunnelBackground);
-					break;
-				}
-				case '7': {
-					Decoration tunnelBackground = new Decoration(Decoration.DECORATION_TYPE_ROCK_TUNNEL_CENTRE, Decoration.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
-					world.backgroundDecoration.add(tunnelBackground);
-					break;
-				}
-				case '8': {
-					Decoration tunnelBackground = new Decoration(Decoration.DECORATION_TYPE_TUNNEL_EXIT_RIGHT, Decoration.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
-					world.backgroundDecoration.add(tunnelBackground);
-					break;
-				}
-				case 'T': {
-			        Decoration tunnel = new Decoration(Decoration.DECORATION_TYPE_TUNNEL_BACKGROUND, Decoration.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
-			        world.backgroundDecoration.add(tunnel);
-					break;
-				}
-				case 'C': {
-		        	world.opals.add(new Opal(x * 2, y));
-					break;
-				}
-				case 'B': {
-		        	world.bats.add(new Bat(x * 2, y, world));
-					break;
-				}
-				case 'W': {
-		        	world.waftyBirds.add(new WaftyBird(x * 2, y));
-					break;
-				}
-				case '5': {
-			        Platform platform = new Platform(Platform.PLATFORM_TYPE_GRASSY_ROCK, Platform.PLATFORM_MOTION_TYPE_MOVING, x * 2, y, world);
-			        world.platforms.add(platform);
-					break;
-				}
-				case 'F':
-					world.finishes.add(new Finish(x * 2, y + 1));
-					break;
-				case 'E':
-		        	world.echidnas.add(new Echidna(x * 2, y));
-					break;
-				case 'S':
-					world.wombatSigns.add(new GameObject(x * 2, y + 1, 2, 3));
-					break;
-				case '!':
-					world.willy.position.set(x * 2, y);
-					break;
-				default:
-					break;
+					case '1':
+					case '#': {
+						Platform platform = new Platform(Platform.PLATFORM_TYPE_GRASSY_ROCK, Platform.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						world.platforms.add(platform);
+						break;
+					}
+					case '2': {
+						Platform platform = new Platform(Platform.PLATFORM_TYPE_ROCK_TUNNEL_LEFT, Platform.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						world.platforms.add(platform);
+						break;
+					}
+					case '3': {
+						Platform platform = new Platform(Platform.PLATFORM_TYPE_ROCK_TUNNEL_CENTER, Platform.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						world.platforms.add(platform);
+						break;
+					}
+					case '4': {
+						Platform platform = new Platform(Platform.PLATFORM_TYPE_ROCK_TUNNEL_RIGHT, Platform.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						world.platforms.add(platform);
+						break;
+					}
+					case '6': {
+						Decoration tunnelBackground = new Decoration(Decoration.DECORATION_TYPE_TUNNEL_ENTRANCE_LEFT, Decoration.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						world.backgroundDecoration.add(tunnelBackground);
+						break;
+					}
+					case '7': {
+						Decoration tunnelBackground = new Decoration(Decoration.DECORATION_TYPE_ROCK_TUNNEL_CENTRE, Decoration.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						world.backgroundDecoration.add(tunnelBackground);
+						break;
+					}
+					case '8': {
+						Decoration tunnelBackground = new Decoration(Decoration.DECORATION_TYPE_TUNNEL_EXIT_RIGHT, Decoration.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						world.backgroundDecoration.add(tunnelBackground);
+						break;
+					}
+					case 'T': {
+						Decoration tunnel = new Decoration(Decoration.DECORATION_TYPE_TUNNEL_BACKGROUND, Decoration.PLATFORM_MOTION_TYPE_STATIC, x * 2, y, world);
+						world.backgroundDecoration.add(tunnel);
+						break;
+					}
+					case 'C': {
+						world.opals.add(new Opal(x * 2, y));
+						break;
+					}
+					case 'B': {
+						world.bats.add(new Bat(x * 2, y, world));
+						break;
+					}
+					case 'W': {
+						world.waftyBirds.add(new WaftyBird(x * 2, y));
+						break;
+					}
+					case '5': {
+						Platform platform = new Platform(Platform.PLATFORM_TYPE_GRASSY_ROCK, Platform.PLATFORM_MOTION_TYPE_MOVING, x * 2, y, world);
+						world.platforms.add(platform);
+						break;
+					}
+					case 'F':
+						world.finishes.add(new Finish(x * 2, y + 1));
+						break;
+					case 'E':
+						world.echidnas.add(new Echidna(x * 2, y));
+						break;
+					case 'S':
+						world.wombatSigns.add(new GameObject(x * 2, y + 1, 2, 3));
+						break;
+					case 'J':
+						world.jetPacks.add(new JetPack(x * 2, y));
+						break;
+					case '!':
+						world.willy.position.set(x * 2, y);
+						break;
+					default:
+						break;
 				}
 			}
 		}

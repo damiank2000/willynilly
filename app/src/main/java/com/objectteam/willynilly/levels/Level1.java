@@ -5,7 +5,7 @@ import com.objectteam.willynilly.Level;
 public class Level1 implements Level{
 
 	public String getName() {
-		return "Introduction";
+		return "Welcome to the Outback!";
 	}
 	
 	@Override
@@ -21,7 +21,7 @@ public class Level1 implements Level{
 		level[4]  = "                               B                                                                               B                                     1          ";
 		level[3]  = "                C                                                                                             B                                      1          ";
 		level[2]  = "            1111111111                      C                                                                B                         B  CCCC       1          ";
-		level[1]  = "       S                  C          C     234                                    C                 C       B     C             C         CCCC     F            ";
+		level[1]  = "       S                  C          C     234                                    C                 C       B     C             C         CCCC  J  F            ";
 		level[0]  = "111111111111111111111111111111111111111111111111111111 1 11111111111  111111  11111111   11111   1111111111B    11111 11  11   111111111111111111111111111111111";
 		return level;
 	}
