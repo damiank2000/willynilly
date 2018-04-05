@@ -1,4 +1,4 @@
-package com.objectteam.willynilly;
+package com.objectteam.willynilly.screens;
 
 import java.util.List;
 
@@ -12,16 +12,18 @@ import com.objectteam.framework.impl.GLScreen;
 import com.objectteam.framework.math.OverlapTester;
 import com.objectteam.framework.math.Rectangle;
 import com.objectteam.framework.math.Vector2;
+import com.objectteam.willynilly.Assets;
+import com.objectteam.willynilly.Settings;
 
 public class HighscoresScreen extends GLScreen {
-    Camera2D guiCam;
-    SpriteBatcher batcher;
-    Rectangle backBounds;
-    Vector2 touchPoint;
-    String[] highScores;  
-    float xOffset = 0;
+    private Camera2D guiCam;
+    private SpriteBatcher batcher;
+    private Rectangle backBounds;
+    private Vector2 touchPoint;
+    private String[] highScores;
+    private float xOffset;
     
-    public HighscoresScreen(Game game) {
+    HighscoresScreen(Game game) {
         super(game);
         
         guiCam = new Camera2D(glGraphics, 480, 320);

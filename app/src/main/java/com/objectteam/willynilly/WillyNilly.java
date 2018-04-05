@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.objectteam.framework.Screen;
 import com.objectteam.framework.impl.GLGame;
+import com.objectteam.willynilly.screens.MainMenuScreen;
 
 public class WillyNilly extends GLGame {
     boolean firstTimeCreate = true;

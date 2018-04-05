@@ -15,8 +15,7 @@
         android:allowBackup="true"
         android:debuggable="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:testOnly="true" >
+        android:label="@string/app_name" >
         <activity
             android:name="com.objectteam.willynilly.WillyNilly"
             android:configChanges="keyboard|keyboardHidden|orientation"

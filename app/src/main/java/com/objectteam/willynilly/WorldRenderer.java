@@ -29,7 +29,7 @@ public class WorldRenderer {
     private Camera2D cam;
     private SpriteBatcher batcher;
     
-    WorldRenderer(GLGraphics glGraphics, SpriteBatcher batcher, World world) {
+    public WorldRenderer(GLGraphics glGraphics, SpriteBatcher batcher, World world) {
         this.glGraphics = glGraphics;
         this.world = world;
         this.cam = new Camera2D(glGraphics, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);

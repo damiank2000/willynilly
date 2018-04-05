@@ -1,53 +1,52 @@
-package com.objectteam.willynilly;
+package com.objectteam.willynilly.screens;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import com.objectteam.framework.Game;
 import com.objectteam.framework.Input.TouchEvent;
+import com.objectteam.framework.Sound;
 import com.objectteam.framework.gl.Camera2D;
 import com.objectteam.framework.gl.SpriteBatcher;
+import com.objectteam.framework.gl.TextureRegion;
 import com.objectteam.framework.impl.GLScreen;
-import com.objectteam.framework.math.Rectangle;
-import com.objectteam.framework.math.Vector2;
-import com.objectteam.willynilly.gameObjects.Willy;
+import com.objectteam.willynilly.Assets;
+import com.objectteam.willynilly.World;
 
-public class GameOverScreen extends GLScreen {
-    Camera2D guiCam;
-    SpriteBatcher batcher;
-    Rectangle soundBounds;
-    Rectangle playBounds;
-    Rectangle highscoresBounds;
-    Rectangle helpBounds;
-    Vector2 touchPoint;
-    Willy[] birds;
-    Random random = new Random();
+public class LevelStartScreen extends GLScreen {
+    private Camera2D guiCam;
+    private SpriteBatcher batcher;
+
+    private static final int SCREEN_WIDTH = 480;
+    private static final int SCREEN_HEIGHT = 320;
+    private static final float SCREEN_DISPLAY_DURATION = 3f;
+    private float stateTime = 0;
+    private boolean soundPlayed;
+    private World world;
+    private String message1;
+    private String message2;
+    private TextureRegion graphic;
+    private Sound sound;
     
-    static final int SCREEN_WIDTH = 480;
-    static final int SCREEN_HEIGHT = 320;
-    static final float SCREEN_DISPLAY_DURATION = 3f;
-    float stateTime = 0;
-    boolean soundPlayed = false;
-    World world;
-    String scoreString;
-    
-    public GameOverScreen(Game game, World world, String scoreString) {
+    LevelStartScreen(Game game, World world) {
         super(game);
         this.world = world;
+        this.world.reset();
         guiCam = new Camera2D(glGraphics, SCREEN_WIDTH, SCREEN_HEIGHT);
         batcher = new SpriteBatcher(glGraphics, 100);
-        birds = new Willy[20];
         soundPlayed = false;
-        this.scoreString = scoreString;
-    }       
+        message1 = "LEVEL " + world.level;
+        message2 = world.levelName;
+        graphic = Assets.ready;
+        sound = Assets.levelStartSound;
+    }    
     
     @Override
     public void update(float deltaTime) {
-        if (!soundPlayed && Settings.soundEnabled) {
+        if (!soundPlayed) {
         	soundPlayed = true;
-        	Assets.playSound(Assets.gameOverSound);
+        	Assets.playSound(sound);
         }
     	
     	List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
@@ -56,12 +55,7 @@ public class GameOverScreen extends GLScreen {
         stateTime += deltaTime;
         
         if (stateTime >= SCREEN_DISPLAY_DURATION || touchedScreen(touchEvents)) {
-            if(Settings.soundEnabled) {
-                Assets.backgroundMusic.stop();
-                Assets.titleMusic.play();
-            }
-   	    	game.setScreen(new MainMenuScreen(game));
-            return;
+            game.setScreen(new GameScreen(game, world));
         }
         
     }
@@ -90,17 +84,18 @@ public class GameOverScreen extends GLScreen {
         
         batcher.beginBatch(Assets.items);                 
         batcher.drawSprite((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), SCREEN_WIDTH, SCREEN_HEIGHT, Assets.blankRegion);
-	    batcher.drawSprite((SCREEN_WIDTH / 2), SCREEN_HEIGHT / 2, 160, 96, Assets.gameOver);        
-	    float scoreWidth = Assets.font.glyphWidth * scoreString.length();
-	    Assets.font.drawText(batcher, scoreString, (SCREEN_WIDTH / 2) - scoreWidth / 2, SCREEN_HEIGHT -20);
-        batcher.endBatch();
-                
+	    batcher.drawSprite(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 192, 32, graphic);
+	    float message1Width = Assets.font.glyphWidth * message1.length();
+	    Assets.font.drawText(batcher, message1, (SCREEN_WIDTH / 2) - message1Width / 2, SCREEN_HEIGHT -20);
+	    float message2Width = Assets.font.glyphWidth * message2.length();
+	    Assets.font.drawText(batcher, message2, (SCREEN_WIDTH / 2) - message2Width / 2, SCREEN_HEIGHT -60);
+	    batcher.endBatch();
+        
         gl.glDisable(GL10.GL_BLEND);
     }
     
     @Override
     public void pause() {        
-        Settings.save(game.getFileIO());
     }
 
     @Override

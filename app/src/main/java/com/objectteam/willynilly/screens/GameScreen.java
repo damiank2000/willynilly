@@ -1,4 +1,4 @@
-package com.objectteam.willynilly;
+package com.objectteam.willynilly.screens;
 
 import java.util.List;
 
@@ -15,6 +15,11 @@ import com.objectteam.framework.impl.GLScreen;
 import com.objectteam.framework.math.OverlapTester;
 import com.objectteam.framework.math.Rectangle;
 import com.objectteam.framework.math.Vector2;
+import com.objectteam.willynilly.Assets;
+import com.objectteam.willynilly.GameState;
+import com.objectteam.willynilly.Settings;
+import com.objectteam.willynilly.World;
+import com.objectteam.willynilly.WorldRenderer;
 
 public class GameScreen extends GLScreen {
 
@@ -28,14 +33,12 @@ public class GameScreen extends GLScreen {
     private Vector2 touchPoint;
     private SpriteBatcher batcher;
     private World world;
-    private WorldListener worldListener;
     private WorldRenderer renderer;
     private Rectangle resumeBounds;
     private Rectangle quitBounds;
     private int lastScore;
     private int lastLives;
     private String scoreString;
-    private String livesString;
     private FPSCounter fpsCounter;
     private float stateTime = 0;
     private float lifeStateTime;
@@ -52,7 +55,6 @@ public class GameScreen extends GLScreen {
         quitBounds = new Rectangle((SCREEN_WIDTH / 2) - 96, (SCREEN_HEIGHT / 2) - 36, 192, 36);
         lastScore = 0;
         scoreString = "score: 0";
-        livesString = "lives: " + world.willy.lives;
         lifeStateTime = 0;
         fpsCounter = new FPSCounter();
     }
@@ -125,7 +127,6 @@ public class GameScreen extends GLScreen {
 	    }
 	    if(world.willy.lives != lastLives) {
 	    	lastLives = world.willy.lives;
-	    	livesString = "lives: " + lastLives;
 	    }
 	    if(world.state == World.WORLD_STATE_NEXT_LEVEL) {
 	        setState(GameState.LevelEnd);
@@ -190,14 +191,14 @@ public class GameScreen extends GLScreen {
 	}
 
 	private void updateGameOver() {
-        if(lastScore >= Settings.highscores[4]) 
+        if(lastScore >= Settings.highscores[4])
             scoreString = "new highscore: " + lastScore;
         else
             scoreString = "score: " + lastScore;
         Settings.addScore(lastScore);
         Settings.save(game.getFileIO());
         Assets.stopMusic(Assets.backgroundMusic);
-    	game.setScreen(new GameOverScreen(game, world, scoreString));
+    	game.setScreen(new GameOverScreen(game, scoreString));
 	}
 
 	@Override
@@ -217,7 +218,7 @@ public class GameScreen extends GLScreen {
 	        presentReady();
 	        break;
 	    case Running:
-	        presentRunning(deltaTime);
+	        presentRunning();
 	        break;
 	    case Paused:
 	        presentPaused();
@@ -241,7 +242,7 @@ public class GameScreen extends GLScreen {
 	    batcher.drawSprite(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 192, 32, Assets.ready);
 	}
 	
-	private void presentRunning(float deltaTime) {
+	private void presentRunning() {
 	    Assets.font.drawText(batcher, scoreString, 16, SCREEN_HEIGHT-20);
 	    presentRemainingLives();
 	}

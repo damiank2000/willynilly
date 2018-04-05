@@ -1,4 +1,4 @@
-package com.objectteam.willynilly;
+package com.objectteam.willynilly.screens;
 
 import java.util.List;
 import java.util.Random;
@@ -13,7 +13,15 @@ import com.objectteam.framework.gl.SpriteBatcher;
 import com.objectteam.framework.gl.TextureRegion;
 import com.objectteam.framework.impl.GLScreen;
 import com.objectteam.framework.math.Vector2;
+import com.objectteam.willynilly.Assets;
+import com.objectteam.willynilly.PushButton;
+import com.objectteam.willynilly.Settings;
+import com.objectteam.willynilly.World;
+import com.objectteam.willynilly.WorldListener;
 import com.objectteam.willynilly.gameObjects.DemoWilly;
+import com.objectteam.willynilly.screens.ChooseLevelScreen;
+import com.objectteam.willynilly.screens.HighscoresScreen;
+import com.objectteam.willynilly.screens.LevelStartScreen;
 
 public class MainMenuScreen extends GLScreen {
     private Camera2D guiCam;
@@ -30,9 +38,7 @@ public class MainMenuScreen extends GLScreen {
     private static final int SCREEN_WIDTH = 480;
     private static final int SCREEN_HEIGHT = 320;
     private static final int MOVING_WILLIES = 10;
-    
-    private World world;
-    private WorldListener worldListener;
+
     private int startingLevel = 1;
     
     public MainMenuScreen(Game game) {
@@ -113,46 +119,46 @@ public class MainMenuScreen extends GLScreen {
 	private void startNewGame() {
 		Assets.playSound(Assets.clickSound);
 		Assets.titleMusic.stop();
-		worldListener = new WorldListener() {
-		    @Override
-		    public void jump() {            
-		        Assets.playSound(Assets.jumpSound);
-		    }
+        WorldListener worldListener = new WorldListener() {
+            @Override
+            public void jump() {
+                Assets.playSound(Assets.jumpSound);
+            }
 
-		    @Override
-		    public void highJump() {
-		        Assets.playSound(Assets.fanSound);
-		    }
+            @Override
+            public void highJump() {
+                Assets.playSound(Assets.fanSound);
+            }
 
-		    @Override
-		    public void hit() {
-		        Assets.playSound(Assets.hitSound);
-		    }
+            @Override
+            public void hit() {
+                Assets.playSound(Assets.hitSound);
+            }
 
-		    @Override
-		    public void coin() {
-		        Assets.playSound(Assets.collectSound);
-		    }                      
+            @Override
+            public void coin() {
+                Assets.playSound(Assets.collectSound);
+            }
 
-		    @Override
-		    public void boing() {
-		        Assets.playSound(Assets.boingSound);
-		    }                      
+            @Override
+            public void boing() {
+                Assets.playSound(Assets.boingSound);
+            }
 
-		    @Override
-		    public void gameOver() {
-		        Assets.playSound(Assets.gameOverSound);
-		    }
-		    
-		    @Override
-		    public void complete() {
-		    	Assets.backgroundMusic.stop();
-		        Assets.playSound(Assets.completeSound);
-		    }
+            @Override
+            public void gameOver() {
+                Assets.playSound(Assets.gameOverSound);
+            }
 
-		};
-		
-		world = new World(worldListener, startingLevel);
+            @Override
+            public void complete() {
+                Assets.backgroundMusic.stop();
+                Assets.playSound(Assets.completeSound);
+            }
+
+        };
+
+        World world = new World(worldListener, startingLevel);
 		game.setScreen(new LevelStartScreen(game, world));
 	}
 
